@@ -250,7 +250,7 @@ document.querySelectorAll(".plan__card .btn").forEach((btn) => {
   btn.addEventListener("click", (e) => {
     e.preventDefault()
     const planTitle = e.target.closest(".plan__card").querySelector(".plan__title").textContent
-    const message = `Olá! Tenho interesse no plano ${planTitle}. Gostaria de mais informações.`
+    const message = `Olá! Tenho interesse em montar um plano. Gostaria de mais informações.`
     const whatsappUrl = `https://wa.me/5573982005252?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   })
