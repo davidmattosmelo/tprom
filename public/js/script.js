@@ -77,44 +77,148 @@ function smoothScroll(target) {
   }
 }
 
+// Google Sheets Configuration
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycby-_AyOM_lypomFP6Zvr78GUMWhTNj2pLq3Yx8RkSDt47ncOS-0J7OAZ22ocqTY4AUA/exec'
+
+// Function to send data to Google Sheets
+async function sendToGoogleSheets(data) {
+  console.log('🚀 Enviando dados para Google Sheets:', data)
+  console.log('📍 URL:', GOOGLE_SHEETS_URL)
+
+  try {
+    // Criar FormData para enviar como form-encoded
+    const formData = new FormData()
+    Object.keys(data).forEach(key => {
+    formData.append(key, data[key])
+    })
+
+    const response = await fetch(GOOGLE_SHEETS_URL, {
+    method: 'POST',
+    body: formData
+    })
+
+    // Como usamos no-cors, não podemos ler a resposta
+    // Mas se chegou até aqui sem erro, provavelmente funcionou
+    console.log('✅ Dados enviados para Google Sheets')
+    console.log('📊 Status da resposta:', response.type)
+    return true
+  } catch (error) {
+    console.error('❌ Erro ao enviar para Google Sheets:', error)
+    return false
+  }
+}
+
+// Function to send data to WhatsApp
+function sendToWhatsApp(data) {
+  console.log('📱 Iniciando envio para WhatsApp:', data)
+  
+  let message = `🌟 *Nova mensagem do site Tprom!*\n\n`
+
+  if (data.nome) message += `👤 *Nome:* ${data.nome}\n`
+  if (data.email) message += `📧 *E-mail:* ${data.email}\n`
+  if (data.telefone) message += `📱 *Telefone:* ${data.telefone}\n`
+  if (data.mensagem) message += `💬 *Mensagem:* ${data.mensagem}\n`
+  if (data.tipo) message += `📋 *Tipo:* ${data.tipo}\n`
+
+  message += `\n⏰ *Data:* ${new Date().toLocaleString('pt-BR')}`
+
+  const whatsappUrl = `https://wa.me/5573982005252?text=${encodeURIComponent(message)}`
+  
+  console.log('📲 URL do WhatsApp gerada:', whatsappUrl)
+  console.log('📝 Mensagem formatada:', message)
+  
+  try {
+    const newWindow = window.open(whatsappUrl, '_blank')
+    if (newWindow) {
+      console.log('✅ WhatsApp aberto com sucesso!')
+    } else {
+      console.warn('⚠️ Pop-up bloqueado! Tentando alternativa...')
+      // Alternativa: usar location.href
+      window.location.href = whatsappUrl
+    }
+  } catch (error) {
+    console.error('❌ Erro ao abrir WhatsApp:', error)
+    // Fallback: mostrar URL para o usuário
+    alert(`Não foi possível abrir o WhatsApp automaticamente. Copie este link: ${whatsappUrl}`)
+  }
+}
+
 // Form Handling
-function handleEmailSubmit(e) {
+async function handleEmailSubmit(e) {
   e.preventDefault()
   const email = e.target.querySelector('input[type="email"]').value
 
-  // Simulate form submission
   const button = e.target.querySelector("button")
   const originalText = button.textContent
 
   button.textContent = "Enviando..."
   button.disabled = true
 
+  // Prepare data
+  const data = {
+    email: email,
+    tipo: 'Newsletter',
+    data: new Date().toISOString(),
+    timestamp: new Date().toLocaleString('pt-BR')
+  }
+
+  console.log('📧 Dados do formulário de email:', data)
+
+  // Send to Google Sheets (background)
+  const sheetsResult = await sendToGoogleSheets(data)
+  console.log('📊 Resultado do envio para Google Sheets:', sheetsResult)
+
+  // Send to WhatsApp
+  sendToWhatsApp(data)
+
+  // Reset form
   setTimeout(() => {
-    alert(`Obrigado! Entraremos em contato através do e-mail: ${email}`)
     e.target.reset()
     button.textContent = originalText
     button.disabled = false
-  }, 1500)
+  }, 1000)
 }
 
-function handleContactSubmit(e) {
+async function handleContactSubmit(e) {
   e.preventDefault()
   const formData = new FormData(e.target)
-  const data = Object.fromEntries(formData)
+  const formObject = Object.fromEntries(formData)
 
-  // Simulate form submission
   const button = e.target.querySelector('button[type="submit"]')
   const originalText = button.textContent
 
   button.textContent = "Enviando..."
   button.disabled = true
 
+  // Get form inputs by their placeholders since they don't have names
+  const inputs = e.target.querySelectorAll('.form__input')
+  const data = {
+    nome: inputs[0]?.value || '',
+    email: inputs[1]?.value || '',
+    telefone: inputs[2]?.value || '',
+    mensagem: inputs[3]?.value || '',
+    tipo: 'Contato',
+    data: new Date().toISOString(),
+    timestamp: new Date().toLocaleString('pt-BR')
+  }
+
+  console.log('📝 Dados do formulário de contato:', data)
+
+  // Send to Google Sheets (background)
+  const sheetsResult = await sendToGoogleSheets(data)
+  console.log('📊 Resultado do envio para Google Sheets:', sheetsResult)
+
+  // Send to WhatsApp (com pequeno delay)
   setTimeout(() => {
-    alert("Mensagem enviada com sucesso! Entraremos em contato em breve.")
+    sendToWhatsApp(data)
+  }, 500)
+
+  // Reset form
+  setTimeout(() => {
     e.target.reset()
     button.textContent = originalText
     button.disabled = false
-  }, 1500)
+  }, 1000)
 }
 
 // Header Scroll Effect
@@ -126,9 +230,9 @@ function handleScroll() {
   if (scrollTop > 100) {
     // Usar cores que se adaptam ao tema
     if (currentTheme === "dark") {
-      header.style.backgroundColor = "rgba(26, 26, 26, 0.95)" // Cor escura com transparência
+    header.style.backgroundColor = "rgba(26, 26, 26, 0.95)" // Cor escura com transparência
     } else {
-      header.style.backgroundColor = "rgba(255, 255, 255, 0.95)" // Cor clara com transparência
+    header.style.backgroundColor = "rgba(255, 255, 255, 0.95)" // Cor clara com transparência
     }
     header.style.backdropFilter = "blur(10px)"
   } else {
