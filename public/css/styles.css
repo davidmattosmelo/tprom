@@ -227,6 +227,18 @@ html {
   background-attachment: fixed;
 }
 
+/* dentro do @media (max-width: 768px) { ... } */
+.hero__content {
+  margin-top: 2.5rem; /* ajuste o valor até ficar do jeito que quer */
+}
+
+@media (max-width: 768px) {
+  .hero__image {
+    transform: translateY(-6vh); /* sobe 6% da altura da tela */
+    transition: transform 0.25s ease;
+  }
+}
+
 /* Overlay escuro para melhor legibilidade */
 .hero::before {
   content: '';
@@ -274,8 +286,12 @@ html {
   color: #ffffff !important;
 }
 
-.hero__actions {
-  margin-bottom: var(--spacing-xl);
+@media (max-width: 768px) {
+  .hero__actions {
+    margin-bottom: var(--spacing-xl);
+    transform: translateY(4vh); /* desce 4% da altura da tela */
+    transition: transform 0.25s ease;
+  }
 }
 
 /* ========================================
