@@ -208,7 +208,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(133, 141, 253, 0.5); /* Preto com 50% de opacidade */
+    background-color: #a4a4ff4d; /* Preto com 50% de opacidade */
     z-index: 1; /* Garante que o overlay fique atrás do conteúdo */
 }
 
