@@ -10,8 +10,8 @@
   --primary-color: #0000ff;
   --secondary-color: #ff7f00;
   --accent-color: #ffc107;
-  --dark-color: #333333;
-  --white-color: #ffffff;
+  --dark-color: #3333;
+  --white-color: #ffff;
   --light-gray: #f8f9fa;
   --medium-gray: #6c757d;
   --border-color: #e9ecef;
@@ -59,7 +59,7 @@
 [data-theme="dark"] {
   --white-color: #1a1a1a;
   --light-gray: #2d2d2d;
-  --dark-color: #ffffff;
+  --dark-color: #ffff;
   --medium-gray: #b0b0b0;
   --border-color: #404040;
 }
@@ -363,7 +363,7 @@ body {
 
 /* ALTERAÇÃO: Botão WhatsApp no modo escuro - texto branco */
 [data-theme="dark"] .btn--primary {
-  color: #ffffff !important;
+  color: #ffff !important;
 }
 
 .btn--secondary {
@@ -820,12 +820,12 @@ body {
 /* ALTERAÇÃO: Ícones do rodapé no modo escuro - símbolos brancos, círculo azul */
 [data-theme="dark"] .social__link {
   background-color: var(--primary-color) !important;
-  color: #ffffff !important;
+  color: #ffff !important;
 }
 
 [data-theme="dark"] .social__link:hover {
   background-color: var(--secondary-color) !important;
-  color: #ffffff !important;
+  color: #ffff !important;
 }
 
 .footer__bottom {
@@ -850,8 +850,8 @@ body {
     background-color: var(--white-color);
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
-    padding-top: var(--spacing-xl);
+    align-items: flex-start;
+    padding: var(--spacing-xl) var(--spacing-lg);
     transition: left var(--transition-normal);
     border-top: 1px solid var(--border-color);
   }
@@ -863,6 +863,14 @@ body {
   .nav__list {
     flex-direction: column;
     gap: var(--spacing-xl);
+    width: 100%;
+    padding-left: var(--spacing-md);
+  }
+
+  .nav__link {
+    padding: var(--spacing-sm) 0;
+    width: 100%;
+    display: block;
   }
 
   .nav__toggle {
