@@ -48,17 +48,17 @@ function filterPortfolio(category) {
     const itemCategory = item.getAttribute("data-category")
 
     if (category === "all" || itemCategory === category) {
-    item.style.display = "block"
-    setTimeout(() => {
-    item.style.opacity = "1"
-    item.style.transform = "scale(1)"
-    }, 10)
+      item.style.display = "block"
+      setTimeout(() => {
+        item.style.opacity = "1"
+        item.style.transform = "scale(1)"
+      }, 10)
     } else {
-    item.style.opacity = "0"
-    item.style.transform = "scale(0.8)"
-    setTimeout(() => {
-    item.style.display = "none"
-    }, 300)
+      item.style.opacity = "0"
+      item.style.transform = "scale(0.8)"
+      setTimeout(() => {
+        item.style.display = "none"
+      }, 300)
     }
   })
 }
@@ -71,8 +71,8 @@ function smoothScroll(target) {
     const elementPosition = element.offsetTop - headerHeight
 
     window.scrollTo({
-    top: elementPosition,
-    behavior: "smooth",
+      top: elementPosition,
+      behavior: "smooth",
     })
   }
 }
@@ -89,12 +89,12 @@ async function sendToGoogleSheets(data) {
     // Criar FormData para enviar como form-encoded
     const formData = new FormData()
     Object.keys(data).forEach(key => {
-    formData.append(key, data[key])
+      formData.append(key, data[key])
     })
 
     const response = await fetch(GOOGLE_SHEETS_URL, {
-    method: 'POST',
-    body: formData
+      method: 'POST',
+      body: formData
     })
 
     // Como usamos no-cors, não podemos ler a resposta
@@ -221,23 +221,15 @@ async function handleContactSubmit(e) {
   }, 1000)
 }
 
-// Header Scroll Effect
+// Header Scroll Effect - ATUALIZADO PARA HEADER TRANSPARENTE
 function handleScroll() {
   const header = document.querySelector(".header")
   const scrollTop = window.pageYOffset
-  const currentTheme = document.documentElement.getAttribute("data-theme")
 
   if (scrollTop > 100) {
-    // Usar cores que se adaptam ao tema
-    if (currentTheme === "dark") {
-    header.style.backgroundColor = "rgba(26, 26, 26, 0.95)" // Cor escura com transparência
-    } else {
-    header.style.backgroundColor = "rgba(255, 255, 255, 0.95)" // Cor clara com transparência
-    }
-    header.style.backdropFilter = "blur(10px)"
+    header.classList.add("scrolled")
   } else {
-    header.style.backgroundColor = "var(--white-color)"
-    header.style.backdropFilter = "none"
+    header.classList.remove("scrolled")
   }
 }
 
@@ -250,10 +242,10 @@ function initScrollAnimations() {
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-    entry.target.style.opacity = "1"
-    entry.target.style.transform = "translateY(0)"
-    }
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1"
+        entry.target.style.transform = "translateY(0)"
+      }
     })
   }, observerOptions)
 
@@ -278,12 +270,12 @@ function updateActiveNavLink() {
     const sectionId = section.getAttribute("id")
 
     if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-    navLinks.forEach((link) => {
-    link.classList.remove("active")
-    if (link.getAttribute("href") === `#${sectionId}`) {
-    link.classList.add("active")
-    }
-    })
+      navLinks.forEach((link) => {
+        link.classList.remove("active")
+        if (link.getAttribute("href") === `#${sectionId}`) {
+          link.classList.add("active")
+        }
+      })
     }
   })
 }
@@ -292,6 +284,7 @@ function updateActiveNavLink() {
 document.addEventListener("DOMContentLoaded", () => {
   initTheme()
   initScrollAnimations()
+  handleScroll() // Verifica o scroll inicial
 })
 
 themeToggle.addEventListener("click", toggleTheme)
@@ -364,12 +357,12 @@ document.querySelectorAll(".plan__card .btn").forEach((btn) => {
 if ("IntersectionObserver" in window) {
   const imageObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-    const img = entry.target
-    img.src = img.dataset.src || img.src
-    img.classList.remove("loading")
-    observer.unobserve(img)
-    }
+      if (entry.isIntersecting) {
+        const img = entry.target
+        img.src = img.dataset.src || img.src
+        img.classList.remove("loading")
+        observer.unobserve(img)
+      }
     })
   })
 
@@ -384,8 +377,8 @@ function debounce(func, wait) {
   let timeout
   return function executedFunction(...args) {
     const later = () => {
-    clearTimeout(timeout)
-    func(...args)
+      clearTimeout(timeout)
+      func(...args)
     }
     clearTimeout(timeout)
     timeout = setTimeout(later, wait)
