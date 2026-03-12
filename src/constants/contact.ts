@@ -6,7 +6,7 @@ export const CONTACT_ITEMS: ContactItem[] = [
     id: 'whatsapp',
     icon: 'MessageCircle',
     label: 'WhatsApp',
-    value: '+55 73 98200-5252',
+    value: '+55 73 98157-0676',
     href: WHATSAPP_URL,
   },
   {
