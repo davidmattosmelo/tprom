@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  # ----------------------------------------
+  # Production web server
+  # ----------------------------------------
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: tprom-web:latest
+    container_name: tprom-web
+    ports:
+      - '${PORT:-80}:80'
+    restart: unless-stopped
+    environment:
+      - TZ=America/Bahia
+    networks:
+      - tprom-network
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.tprom.rule=Host(`tprom.com.br`)'
+      - 'traefik.http.routers.tprom.entrypoints=websecure'
+      - 'traefik.http.routers.tprom.tls.certresolver=letsencrypt'
+
+  # ----------------------------------------
+  # Dev server (override with docker-compose.dev.yml)
+  # ----------------------------------------
+
+networks:
+  tprom-network:
+    driver: bridge

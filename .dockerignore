@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.gitignore
+*.md
+.env*
+!.env.example
+.vscode
+.DS_Store
+Thumbs.db
+docker-compose.dev.yml
+Dockerfile.dev

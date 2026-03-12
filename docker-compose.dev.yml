@@ -1,0 +1,23 @@
+version: '3.9'
+
+# Development override — use with:
+#   docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    image: tprom-web:dev
+    container_name: tprom-web-dev
+    ports:
+      - '5173:5173'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_HMR_HOST=localhost
+    networks:
+      - tprom-network
